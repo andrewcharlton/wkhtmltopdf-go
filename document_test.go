@@ -125,6 +125,9 @@ func TestWriteTemp(t *testing.T) {
 
 	exp := []string{"page00000001.html", "page00000002.html", "page00000003.html"}
 	files, err := ioutil.ReadDir(TempDir + "/" + doc.tmp)
+	if err != nil {
+		t.Errorf("Unexpected error: %v", err)
+	}
 
 	if len(files) != 3 {
 		t.Errorf("Wrong number of files produced. Expected 3, Got: %v", len(files))
