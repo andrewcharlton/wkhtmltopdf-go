@@ -15,6 +15,14 @@ type GlobalOption struct {
 // opts returns the options, to satisfy the options interface
 func (opt GlobalOption) opts() []string { return opt.options }
 
+// A PageOption can be applied only to a page.
+type PageOption struct {
+	options []string
+}
+
+// opts returns the options, to satisfy the options interface
+func (opt PageOption) opts() []string { return opt.options }
+
 // NoCollate - do not collate when printing multiple copies.
 func NoCollate() GlobalOption {
 	return GlobalOption{[]string{"--no-collate"}}
@@ -105,4 +113,16 @@ func Quiet() GlobalOption {
 // if not specified).
 func Title(title string) GlobalOption {
 	return GlobalOption{[]string{"--title", title}}
+}
+
+// Page Options -------------------------------------------------------------------------
+
+// Allow the file or files from the specified folder to be loaded (repeatable)
+func Allow(path string) PageOption {
+	return PageOption{[]string{"--allow", path}}
+}
+
+// NoBackground - do not print background
+func NoBackground() PageOption {
+	return PageOption{[]string{"--no-background"}}
 }

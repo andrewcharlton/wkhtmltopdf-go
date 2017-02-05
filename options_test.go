@@ -32,3 +32,22 @@ func TestGlobalOptions(t *testing.T) {
 		}
 	}
 }
+
+func TestPageOptions(t *testing.T) {
+
+	testcases := []struct {
+		Options []PageOption
+		Args    []string
+	}{
+		{[]PageOption{Allow("test/")}, []string{"--allow", "test/"}},
+		{[]PageOption{NoBackground()}, []string{"--no-background"}},
+	}
+
+	for _, tc := range testcases {
+		pg := NewPage("", tc.Options...)
+		if !reflect.DeepEqual(pg.options, tc.Args) {
+			t.Errorf("Wrong arguments created. Expected: %v, Got: %v", tc.Args, pg.options)
+		}
+	}
+
+}
