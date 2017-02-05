@@ -42,3 +42,19 @@ func TestAddPages(t *testing.T) {
 		}
 	}
 }
+
+func TestArgs(t *testing.T) {
+
+	doc := NewDocument(Grayscale(), PageSize("A5"))
+	pg1 := NewPage("page1.html", Allow("images/"))
+	pg2 := NewPage("page2.html", NoBackground())
+	doc.AddPages(pg1, pg2)
+
+	args := doc.args()
+	exp := []string{"--grayscale", "--page-size", "A5", "page1.html", "--allow",
+		"images/", "page2.html", "--no-background"}
+
+	if !reflect.DeepEqual(args, exp) {
+		t.Errorf("Wrong error produced. Expected: %v, Got: %v", exp, args)
+	}
+}

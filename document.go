@@ -28,9 +28,8 @@ func (doc *Document) AddPages(pages ...*Page) {
 	doc.pages = append(doc.pages, pages...)
 }
 
-// WriteToFile creates the pdf document and writes it
-// to the specified filename.
-func (doc *Document) WriteToFile(filename string) error {
+// args calculates the args needed to run wkhtmltopdf
+func (doc *Document) args() []string {
 
 	args := []string{}
 	args = append(args, doc.options...)
@@ -38,7 +37,14 @@ func (doc *Document) WriteToFile(filename string) error {
 		args = append(args, pg.filename)
 		args = append(args, pg.options...)
 	}
-	args = append(args, filename)
+	return args
+}
+
+// WriteToFile creates the pdf document and writes it
+// to the specified filename.
+func (doc *Document) WriteToFile(filename string) error {
+
+	args := append(doc.args(), filename)
 
 	cmd := exec.Command("wkhtmltopdf", args...)
 	errbuf := &bytes.Buffer{}
