@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"io"
 	"io/ioutil"
+	"os"
 	"os/exec"
 )
 
@@ -108,7 +109,12 @@ func (doc *Document) createPDF() (*bytes.Buffer, error) {
 	if err != nil {
 		return nil, fmt.Errorf("Error running wkhtmltopdf: %v", errbuf.String())
 	}
-	return buf, nil
+
+	if doc.tmp != "" {
+		err = os.RemoveAll(TempDir + "/" + doc.tmp)
+	}
+	return buf, err
+
 }
 
 // WriteToFile creates the pdf document and writes it
