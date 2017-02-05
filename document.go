@@ -42,6 +42,19 @@ func (doc *Document) args() []string {
 	return args
 }
 
+// readers counts the number of pages using a reader
+// as a source
+func (doc *Document) readers() int {
+
+	n := 0
+	for _, pg := range doc.pages {
+		if pg.reader {
+			n++
+		}
+	}
+	return n
+}
+
 // createPDF creates the pdf and writes it to the buffer,
 // which can then be written to file or writer.
 func (doc *Document) createPDF() (*bytes.Buffer, error) {

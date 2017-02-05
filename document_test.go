@@ -1,6 +1,7 @@
 package wkhtmltopdf
 
 import (
+	"bytes"
 	"reflect"
 	"testing"
 )
@@ -56,5 +57,30 @@ func TestArgs(t *testing.T) {
 
 	if !reflect.DeepEqual(args, exp) {
 		t.Errorf("Wrong error produced. Expected: %v, Got: %v", exp, args)
+	}
+}
+
+func TestReaders(t *testing.T) {
+
+	f := NewPage("test.html")
+	r, _ := NewPageReader(bytes.NewBufferString("test"))
+
+	testcases := []struct {
+		Pages []*Page
+		N     int
+	}{
+		{[]*Page{f}, 0},
+		{[]*Page{r}, 1},
+		{[]*Page{r, r, f}, 2},
+		{[]*Page{r, f, r, r, f, r, f}, 4},
+	}
+
+	for _, tc := range testcases {
+		doc := NewDocument()
+		doc.AddPages(tc.Pages...)
+		n := doc.readers()
+		if n != tc.N {
+			t.Errorf("Wrong count. Expected : %v, Got: %v", tc.N, n)
+		}
 	}
 }
