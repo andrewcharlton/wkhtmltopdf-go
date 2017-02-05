@@ -3,6 +3,8 @@ package wkhtmltopdf
 import (
 	"bytes"
 	"fmt"
+	"io"
+	"io/ioutil"
 	"os/exec"
 )
 
@@ -40,19 +42,55 @@ func (doc *Document) args() []string {
 	return args
 }
 
-// WriteToFile creates the pdf document and writes it
-// to the specified filename.
-func (doc *Document) WriteToFile(filename string) error {
+// createPDF creates the pdf and writes it to the buffer,
+// which can then be written to file or writer.
+func (doc *Document) createPDF() (*bytes.Buffer, error) {
 
-	args := append(doc.args(), filename)
+	args := append(doc.args(), "-")
+
+	buf := &bytes.Buffer{}
+	errbuf := &bytes.Buffer{}
 
 	cmd := exec.Command("wkhtmltopdf", args...)
-	errbuf := &bytes.Buffer{}
+	cmd.Stdout = buf
 	cmd.Stderr = errbuf
 	err := cmd.Run()
 
 	if err != nil {
-		return fmt.Errorf("Error running wkhtmltopdf: %v", errbuf.String())
+		return nil, fmt.Errorf("Error running wkhtmltopdf: %v", errbuf.String())
+	}
+	return buf, nil
+}
+
+// WriteToFile creates the pdf document and writes it
+// to the specified filename.
+func (doc *Document) WriteToFile(filename string) error {
+
+	buf, err := doc.createPDF()
+	if err != nil {
+		return err
+	}
+
+	err = ioutil.WriteFile(filename, buf.Bytes(), 0666)
+	if err != nil {
+		return fmt.Errorf("Error creating file: %v", err)
+	}
+
+	return nil
+}
+
+// Write creates the pdf document and writes it
+// to the provided reader.
+func (doc *Document) Write(w io.Writer) error {
+
+	buf, err := doc.createPDF()
+	if err != nil {
+		return err
+	}
+
+	_, err = buf.WriteTo(w)
+	if err != nil {
+		return fmt.Errorf("Error writing to writer: %v", err)
 	}
 
 	return nil
