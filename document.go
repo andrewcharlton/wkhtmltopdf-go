@@ -8,12 +8,18 @@ import (
 
 // A Document represents a single pdf document.
 type Document struct {
-	pages []string
+	pages   []string
+	options []string
 }
 
 // NewDocument creates a new document.
-func NewDocument() *Document {
-	return &Document{pages: []string{}}
+func NewDocument(opts ...Option) *Document {
+
+	doc := &Document{pages: []string{}, options: []string{}}
+	for _, opt := range opts {
+		doc.options = append(doc.options, opt.opts()...)
+	}
+	return doc
 }
 
 // AddPages to the document. Pages will be included in

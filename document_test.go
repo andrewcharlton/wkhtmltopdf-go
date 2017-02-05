@@ -8,9 +8,9 @@ import (
 func TestNewDocument(t *testing.T) {
 
 	doc := NewDocument()
-	if !reflect.DeepEqual(doc, &Document{pages: []string{}}) {
-		t.Errorf("NewDocument not produced correctly. Expected: %v, Got: %v",
-			&Document{pages: []string{}}, doc)
+	exp := &Document{pages: []string{}, options: []string{}}
+	if !reflect.DeepEqual(doc, exp) {
+		t.Errorf("NewDocument not produced correctly. Expected: %v, Got: %v", exp, doc)
 	}
 }
 
