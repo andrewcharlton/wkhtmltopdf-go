@@ -1,2 +1,5 @@
 # Generated output files
 test_data/*.pdf
+
+# Temporary generated fils
+temp*

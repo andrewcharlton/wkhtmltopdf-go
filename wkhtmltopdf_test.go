@@ -4,6 +4,7 @@ import (
 	"bytes"
 	"errors"
 	"io"
+	"os"
 	"strings"
 	"testing"
 
@@ -75,5 +76,30 @@ func TestWriteToReader(t *testing.T) {
 		case !strings.HasPrefix(err.Error(), tc.Err):
 			t.Errorf("%v. Wrong error produced. Expected: %v, Got: %v", tc.Case, tc.Err, err)
 		}
+	}
+}
+
+func TestWriteFromReader(t *testing.T) {
+
+	f, err := os.Open("test_data/simple.html")
+	if err != nil {
+		t.Errorf("Unexpected error: %v", err)
+	}
+
+	buf := &bytes.Buffer{}
+	buf.ReadFrom(f)
+
+	pg, err := wkhtmltopdf.NewPageReader(buf)
+	if err != nil {
+		t.Errorf("Unexpected error: %v", err)
+	}
+
+	doc := wkhtmltopdf.NewDocument()
+	doc.AddPages(pg)
+
+	output := &bytes.Buffer{}
+	err = doc.Write(output)
+	if err != nil {
+		t.Errorf("Unexpected error: %v", err)
 	}
 }

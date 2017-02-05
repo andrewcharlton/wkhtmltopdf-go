@@ -2,7 +2,10 @@ package wkhtmltopdf
 
 import (
 	"bytes"
+	"io/ioutil"
+	"os"
 	"reflect"
+	"strings"
 	"testing"
 )
 
@@ -83,4 +86,56 @@ func TestReaders(t *testing.T) {
 			t.Errorf("Wrong count. Expected : %v, Got: %v", tc.N, n)
 		}
 	}
+}
+
+func TestFaultyTempDir(t *testing.T) {
+
+	TempDir = "./no/such/path/exists/to/create/temp/dirs/in"
+
+	doc := NewDocument()
+	pg1, _ := NewPageReader(bytes.NewBufferString("test"))
+	doc.AddPages(pg1)
+
+	_, err := doc.createPDF()
+	if err == nil {
+		t.Errorf("Error expected, got nil")
+	} else if !strings.HasPrefix(err.Error(), "Error writing temp files") {
+		t.Errorf("Expected: Error writing temp files. Got: %v", err)
+	}
+}
+
+func TestWriteTemp(t *testing.T) {
+
+	TempDir = "."
+
+	pg1, _ := NewPageReader(bytes.NewBufferString("test1"))
+	pg2, _ := NewPageReader(bytes.NewBufferString("test2"))
+	pg3, _ := NewPageReader(bytes.NewBufferString("test3"))
+
+	doc := NewDocument()
+	doc.AddPages(NewPage("test.html"))
+	doc.AddPages(pg1, pg2)
+	doc.AddPages(NewPage("test2.html"))
+	doc.AddPages(pg3)
+
+	err := doc.writeTempPages()
+	if err != nil {
+		t.Errorf("Unexpected error: %v", err)
+	}
+
+	exp := []string{"page00000001.html", "page00000002.html", "page00000003.html"}
+	files, err := ioutil.ReadDir(TempDir + "/" + doc.tmp)
+
+	if len(files) != 3 {
+		t.Errorf("Wrong number of files produced. Expected 3, Got: %v", len(files))
+	}
+
+	for n, f := range files {
+		if f.Name() != exp[n] {
+			t.Errorf("Wrong file name produced. Expected: %v, Got: %v", exp[n], f.Name())
+		}
+	}
+
+	// Clean up
+	os.RemoveAll(TempDir + "/" + doc.tmp)
 }
