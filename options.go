@@ -126,3 +126,8 @@ func Allow(path string) PageOption {
 func NoBackground() PageOption {
 	return PageOption{[]string{"--no-background"}}
 }
+
+// CacheDir - web cache directory
+func CacheDir(path string) PageOption {
+	return PageOption{[]string{"--cache-dir", path}}
+}

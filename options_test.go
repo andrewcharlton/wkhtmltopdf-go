@@ -41,6 +41,7 @@ func TestPageOptions(t *testing.T) {
 	}{
 		{[]PageOption{Allow("test/")}, []string{"--allow", "test/"}},
 		{[]PageOption{NoBackground()}, []string{"--no-background"}},
+		{[]PageOption{CacheDir("cache/")}, []string{"--cache-dir", "cache/"}},
 	}
 
 	for _, tc := range testcases {
