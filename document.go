@@ -8,14 +8,14 @@ import (
 
 // A Document represents a single pdf document.
 type Document struct {
-	pages   []string
+	pages   []*Page
 	options []string
 }
 
 // NewDocument creates a new document.
 func NewDocument(opts ...Option) *Document {
 
-	doc := &Document{pages: []string{}, options: []string{}}
+	doc := &Document{pages: []*Page{}, options: []string{}}
 	for _, opt := range opts {
 		doc.options = append(doc.options, opt.opts()...)
 	}
@@ -24,7 +24,7 @@ func NewDocument(opts ...Option) *Document {
 
 // AddPages to the document. Pages will be included in
 // the final pdf in the order they are added.
-func (doc *Document) AddPages(pages ...string) {
+func (doc *Document) AddPages(pages ...*Page) {
 	doc.pages = append(doc.pages, pages...)
 }
 
@@ -32,7 +32,14 @@ func (doc *Document) AddPages(pages ...string) {
 // to the specified filename.
 func (doc *Document) WriteToFile(filename string) error {
 
-	args := append(doc.pages, filename)
+	args := []string{}
+	args = append(args, doc.options...)
+	for _, pg := range doc.pages {
+		args = append(args, pg.filename)
+		args = append(args, pg.options...)
+	}
+	args = append(args, filename)
+
 	cmd := exec.Command("wkhtmltopdf", args...)
 	errbuf := &bytes.Buffer{}
 	cmd.Stderr = errbuf

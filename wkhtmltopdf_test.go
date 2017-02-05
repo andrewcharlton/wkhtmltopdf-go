@@ -22,7 +22,9 @@ func TestPDFCreation(t *testing.T) {
 	for _, tc := range testcases {
 
 		doc := wkhtmltopdf.NewDocument()
-		doc.AddPages(tc.Pages...)
+		for _, pg := range tc.Pages {
+			doc.AddPages(wkhtmltopdf.NewPage(pg))
+		}
 		err := doc.WriteToFile(tc.Filename)
 		switch {
 		case err == nil && tc.Err != "":
