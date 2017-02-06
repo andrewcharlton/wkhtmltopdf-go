@@ -40,6 +40,7 @@ func TestPageOptions(t *testing.T) {
 		Args    []string
 	}{
 		{[]PageOption{Allow("test/")}, []string{"--allow", "test/"}},
+		{[]PageOption{Background()}, []string{"--background"}},
 		{[]PageOption{NoBackground()}, []string{"--no-background"}},
 		{[]PageOption{BypassProxy("test.com")}, []string{"--bypass-proxy-for", "test.com"}},
 		{[]PageOption{CacheDir("cache/")}, []string{"--cache-dir", "cache/"}},
