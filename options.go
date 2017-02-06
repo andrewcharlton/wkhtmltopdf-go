@@ -191,3 +191,8 @@ func Encoding(encoding string) PageOption {
 func DisableExternalLinks() PageOption {
 	return PageOption{[]string{"--disable-external-links"}}
 }
+
+// EnableExternalLinks - Make links to remote web pages
+func EnableExternalLinks() PageOption {
+	return PageOption{[]string{"--enable-external-links"}}
+}
