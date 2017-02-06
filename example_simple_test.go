@@ -6,7 +6,7 @@ import (
 	"github.com/andrewcharlton/wkhtmltopdf-go"
 )
 
-func main() {
+func Example_Simple() {
 
 	doc := wkhtmltopdf.NewDocument()
 	pg := wkhtmltopdf.NewPage("www.google.com")
