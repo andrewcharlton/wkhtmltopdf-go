@@ -142,3 +142,22 @@ func TestWriteTemp(t *testing.T) {
 	// Clean up
 	os.RemoveAll(TempDir + "/" + doc.tmp)
 }
+
+func TestFaultyExecutable(t *testing.T) {
+
+	Executable = "wkhmltopdf"
+
+	doc := NewDocument()
+	pg := NewPage("test_data/simple.pdf")
+	doc.AddPages(pg)
+
+	buf := &bytes.Buffer{}
+	err := doc.Write(buf)
+	if err == nil {
+		t.Errorf("Error expected, got nil")
+	} else if !strings.HasPrefix(err.Error(), "Error running wkhtmltopdf") {
+		t.Errorf("wkhtmltopdf error expected, got: %v", err)
+	}
+
+	Executable = "wkhtmltopdf"
+}
