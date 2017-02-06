@@ -46,6 +46,7 @@ func TestPageOptions(t *testing.T) {
 		{[]PageOption{CheckboxCheckedSVG("path")}, []string{"--checkbox-checked-svg", "path"}},
 		{[]PageOption{CheckboxSVG("path")}, []string{"--checkbox-svg", "path"}},
 		{[]PageOption{Cookie("name", "value")}, []string{"--cookie", "name", "value"}},
+		{[]PageOption{CustomHeader("name", "value")}, []string{"--custom-header", "name", "value"}},
 	}
 
 	for _, tc := range testcases {

@@ -158,3 +158,8 @@ func CheckboxSVG(path string) PageOption {
 func Cookie(name, value string) PageOption {
 	return PageOption{[]string{"--cookie", name, value}}
 }
+
+// CustomHeader - Set an additional HTTP header (repeatable)
+func CustomHeader(name, value string) PageOption {
+	return PageOption{[]string{"--custom-header", name, value}}
+}
