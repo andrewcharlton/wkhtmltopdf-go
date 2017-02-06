@@ -216,3 +216,13 @@ func Images() PageOption {
 func NoImages() PageOption {
 	return PageOption{[]string{"--no-images"}}
 }
+
+// DisableInternalLinks - do not make local links
+func DisableInternalLinks() PageOption {
+	return PageOption{[]string{"--disable-internal-links"}}
+}
+
+// EnableInternalLinks - make local links
+func EnableInternalLinks() PageOption {
+	return PageOption{[]string{"--enable-internal-links"}}
+}

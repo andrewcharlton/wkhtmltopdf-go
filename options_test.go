@@ -57,6 +57,8 @@ func TestPageOptions(t *testing.T) {
 		{[]PageOption{EnableForms()}, []string{"--enable-forms"}},
 		{[]PageOption{Images()}, []string{"--images"}},
 		{[]PageOption{NoImages()}, []string{"--no-images"}},
+		{[]PageOption{DisableInternalLinks()}, []string{"--disable-internal-links"}},
+		{[]PageOption{EnableInternalLinks()}, []string{"--enable-internal-links"}},
 	}
 
 	for _, tc := range testcases {
