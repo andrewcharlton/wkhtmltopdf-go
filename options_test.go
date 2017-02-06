@@ -41,7 +41,10 @@ func TestPageOptions(t *testing.T) {
 	}{
 		{[]PageOption{Allow("test/")}, []string{"--allow", "test/"}},
 		{[]PageOption{NoBackground()}, []string{"--no-background"}},
+		{[]PageOption{BypassProxy("test.com")}, []string{"--bypass-proxy-for", "test.com"}},
 		{[]PageOption{CacheDir("cache/")}, []string{"--cache-dir", "cache/"}},
+		{[]PageOption{CheckboxCheckedSVG("path")}, []string{"--checkbox-checked-svg", "path"}},
+		{[]PageOption{CheckboxSVG("path")}, []string{"--checkbox-svg", "path"}},
 	}
 
 	for _, tc := range testcases {

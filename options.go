@@ -23,6 +23,8 @@ type PageOption struct {
 // opts returns the options, to satisfy the options interface
 func (opt PageOption) opts() []string { return opt.options }
 
+// Global Options ----------------------------------------------------------
+
 // NoCollate - do not collate when printing multiple copies.
 func NoCollate() GlobalOption {
 	return GlobalOption{[]string{"--no-collate"}}
@@ -122,12 +124,32 @@ func Allow(path string) PageOption {
 	return PageOption{[]string{"--allow", path}}
 }
 
+// Background - print background (default)
+func Background() PageOption {
+	return PageOption{[]string{"--background"}}
+}
+
 // NoBackground - do not print background
 func NoBackground() PageOption {
 	return PageOption{[]string{"--no-background"}}
 }
 
+// BypassProxy - bypass proxy for host (repeatable)
+func BypassProxy(host string) PageOption {
+	return PageOption{[]string{"--bypass-proxy-for", host}}
+}
+
 // CacheDir - web cache directory
 func CacheDir(path string) PageOption {
 	return PageOption{[]string{"--cache-dir", path}}
+}
+
+// CheckboxCheckedSVG - Use this svg file when rendering checked checkboxes
+func CheckboxCheckedSVG(path string) PageOption {
+	return PageOption{[]string{"--checkbox-checked-svg", path}}
+}
+
+// CheckboxSVG - Use this svg file when rendering unchecked checkboxes
+func CheckboxSVG(path string) PageOption {
+	return PageOption{[]string{"--checkbox-svg", path}}
 }
