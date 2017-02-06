@@ -116,7 +116,7 @@ func (doc *Document) createPDF() (*bytes.Buffer, error) {
 	buf := &bytes.Buffer{}
 	errbuf := &bytes.Buffer{}
 
-	cmd := exec.Command("wkhtmltopdf", args...)
+	cmd := exec.Command(Executable, args...)
 	cmd.Stdin = stdin
 	cmd.Stdout = buf
 	cmd.Stderr = errbuf
