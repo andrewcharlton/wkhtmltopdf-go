@@ -206,3 +206,13 @@ func DisableForms() PageOption {
 func EnableForms() PageOption {
 	return PageOption{[]string{"--enable-forms"}}
 }
+
+// Images - do load or print images
+func Images() PageOption {
+	return PageOption{[]string{"--images"}}
+}
+
+// NoImages - do not load or print images
+func NoImages() PageOption {
+	return PageOption{[]string{"--no-images"}}
+}
