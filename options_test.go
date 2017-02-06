@@ -50,6 +50,7 @@ func TestPageOptions(t *testing.T) {
 		{[]PageOption{CustomHeaderPropagation()}, []string{"--custom-header-propagation"}},
 		{[]PageOption{NoCustomHeaderPropagation()}, []string{"--no-custom-header-propagation"}},
 		{[]PageOption{DefaultHeader()}, []string{"--default-header"}},
+		{[]PageOption{Encoding("UTF8")}, []string{"--encoding", "UTF8"}},
 	}
 
 	for _, tc := range testcases {

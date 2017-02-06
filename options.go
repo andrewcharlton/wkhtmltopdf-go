@@ -181,3 +181,8 @@ func NoCustomHeaderPropagation() PageOption {
 func DefaultHeader() PageOption {
 	return PageOption{[]string{"--default-header"}}
 }
+
+// Encoding - Set the default text encoding for text input
+func Encoding(encoding string) PageOption {
+	return PageOption{[]string{"--encoding", encoding}}
+}
