@@ -186,3 +186,8 @@ func DefaultHeader() PageOption {
 func Encoding(encoding string) PageOption {
 	return PageOption{[]string{"--encoding", encoding}}
 }
+
+// DisableExternalLinks - Do not make links to remote web pages
+func DisableExternalLinks() PageOption {
+	return PageOption{[]string{"--disable-external-links"}}
+}
