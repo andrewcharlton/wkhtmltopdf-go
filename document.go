@@ -89,7 +89,22 @@ func (doc *Document) writeTempPages() error {
 // which can then be written to file or writer.
 func (doc *Document) createPDF() (*bytes.Buffer, error) {
 
-	if doc.readers() > 0 {
+	var stdin io.Reader
+	switch {
+	case doc.readers() == 1:
+
+		// Pipe through stdin for a single reader.
+		for _, pg := range doc.pages {
+			if pg.reader {
+				stdin = pg.buf
+				pg.filename = "-"
+				break
+			}
+		}
+
+	case doc.readers() > 1:
+
+		// Write multiple readers to temp files
 		err := doc.writeTempPages()
 		if err != nil {
 			return nil, fmt.Errorf("Error writing temp files: %v", err)
@@ -102,10 +117,11 @@ func (doc *Document) createPDF() (*bytes.Buffer, error) {
 	errbuf := &bytes.Buffer{}
 
 	cmd := exec.Command("wkhtmltopdf", args...)
+	cmd.Stdin = stdin
 	cmd.Stdout = buf
 	cmd.Stderr = errbuf
-	err := cmd.Run()
 
+	err := cmd.Run()
 	if err != nil {
 		return nil, fmt.Errorf("Error running wkhtmltopdf: %v", errbuf.String())
 	}

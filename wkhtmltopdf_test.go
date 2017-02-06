@@ -88,6 +88,7 @@ func TestWriteFromReader(t *testing.T) {
 
 	buf := &bytes.Buffer{}
 	buf.ReadFrom(f)
+	f.Close()
 
 	pg, err := wkhtmltopdf.NewPageReader(buf)
 	if err != nil {
@@ -99,6 +100,37 @@ func TestWriteFromReader(t *testing.T) {
 
 	output := &bytes.Buffer{}
 	err = doc.Write(output)
+	if err != nil {
+		t.Errorf("Unexpected error: %v", err)
+	}
+}
+
+func TestMultipleReaders(t *testing.T) {
+
+	pages := []*wkhtmltopdf.Page{}
+	for n := 0; n < 5; n++ {
+		f, err := os.Open("test_data/simple.html")
+		if err != nil {
+			t.Errorf("Unexpected error: %v", err)
+		}
+
+		buf := &bytes.Buffer{}
+		buf.ReadFrom(f)
+		f.Close()
+
+		pg, err := wkhtmltopdf.NewPageReader(buf)
+		if err != nil {
+			t.Errorf("Unexpected error: %v", err)
+		}
+
+		pages = append(pages, pg)
+	}
+
+	doc := wkhtmltopdf.NewDocument()
+	doc.AddPages(pages...)
+
+	output := &bytes.Buffer{}
+	err := doc.Write(output)
 	if err != nil {
 		t.Errorf("Unexpected error: %v", err)
 	}

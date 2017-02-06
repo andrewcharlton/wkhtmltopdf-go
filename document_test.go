@@ -93,8 +93,9 @@ func TestFaultyTempDir(t *testing.T) {
 	TempDir = "./no/such/path/exists/to/create/temp/dirs/in"
 
 	doc := NewDocument()
-	pg1, _ := NewPageReader(bytes.NewBufferString("test"))
-	doc.AddPages(pg1)
+	pg1, _ := NewPageReader(bytes.NewBufferString("test1"))
+	pg2, _ := NewPageReader(bytes.NewBufferString("test2"))
+	doc.AddPages(pg1, pg2)
 
 	_, err := doc.createPDF()
 	if err == nil {
