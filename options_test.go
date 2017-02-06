@@ -53,6 +53,8 @@ func TestPageOptions(t *testing.T) {
 		{[]PageOption{Encoding("UTF8")}, []string{"--encoding", "UTF8"}},
 		{[]PageOption{DisableExternalLinks()}, []string{"--disable-external-links"}},
 		{[]PageOption{EnableExternalLinks()}, []string{"--enable-external-links"}},
+		{[]PageOption{DisableForms()}, []string{"--disable-forms"}},
+		{[]PageOption{EnableForms()}, []string{"--enable-forms"}},
 	}
 
 	for _, tc := range testcases {

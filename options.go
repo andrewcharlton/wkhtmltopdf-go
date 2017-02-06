@@ -196,3 +196,13 @@ func DisableExternalLinks() PageOption {
 func EnableExternalLinks() PageOption {
 	return PageOption{[]string{"--enable-external-links"}}
 }
+
+// DisableForms - Do not turn HTML form fields into pdf form fields
+func DisableForms() PageOption {
+	return PageOption{[]string{"--disable-forms"}}
+}
+
+// EnableForms - Turn HTML form fields into pdf form fields
+func EnableForms() PageOption {
+	return PageOption{[]string{"--enable-forms"}}
+}
