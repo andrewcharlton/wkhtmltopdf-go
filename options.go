@@ -175,3 +175,9 @@ func CustomHeaderPropagation() PageOption {
 func NoCustomHeaderPropagation() PageOption {
 	return PageOption{[]string{"--no-custom-header-propagation"}}
 }
+
+// DefaultHeader - Add a default header, with the name of the page to the left
+// and the page numner to the right.
+func DefaultHeader() PageOption {
+	return PageOption{[]string{"--default-header"}}
+}

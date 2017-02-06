@@ -49,6 +49,7 @@ func TestPageOptions(t *testing.T) {
 		{[]PageOption{CustomHeader("name", "value")}, []string{"--custom-header", "name", "value"}},
 		{[]PageOption{CustomHeaderPropagation()}, []string{"--custom-header-propagation"}},
 		{[]PageOption{NoCustomHeaderPropagation()}, []string{"--no-custom-header-propagation"}},
+		{[]PageOption{DefaultHeader()}, []string{"--default-header"}},
 	}
 
 	for _, tc := range testcases {
