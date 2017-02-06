@@ -153,3 +153,8 @@ func CheckboxCheckedSVG(path string) PageOption {
 func CheckboxSVG(path string) PageOption {
 	return PageOption{[]string{"--checkbox-svg", path}}
 }
+
+// Cookie - Set an additional cookie (repeatable), value should be url encoded.
+func Cookie(name, value string) PageOption {
+	return PageOption{[]string{"--cookie", name, value}}
+}

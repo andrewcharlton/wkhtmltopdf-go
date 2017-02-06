@@ -45,6 +45,7 @@ func TestPageOptions(t *testing.T) {
 		{[]PageOption{CacheDir("cache/")}, []string{"--cache-dir", "cache/"}},
 		{[]PageOption{CheckboxCheckedSVG("path")}, []string{"--checkbox-checked-svg", "path"}},
 		{[]PageOption{CheckboxSVG("path")}, []string{"--checkbox-svg", "path"}},
+		{[]PageOption{Cookie("name", "value")}, []string{"--cookie", "name", "value"}},
 	}
 
 	for _, tc := range testcases {
