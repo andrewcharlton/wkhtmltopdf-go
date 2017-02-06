@@ -163,3 +163,9 @@ func Cookie(name, value string) PageOption {
 func CustomHeader(name, value string) PageOption {
 	return PageOption{[]string{"--custom-header", name, value}}
 }
+
+// CustomHeaderPropagation - Add HTTP headers specified by --custom-header for
+// each resource request.
+func CustomHeaderPropagation() PageOption {
+	return PageOption{[]string{"--custom-header-propagation"}}
+}
