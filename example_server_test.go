@@ -1,5 +1,9 @@
 package wkhtmltopdf_test
 
+/* This example creates an http server, which returns a simple
+   pdf document with a title and the path of the request.
+*/
+
 import (
 	"bytes"
 	"html/template"
@@ -39,7 +43,7 @@ func handler(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
-func Example_Server() {
+func Example() {
 
 	http.HandleFunc("/", handler)
 	http.ListenAndServe(":8080", nil)
