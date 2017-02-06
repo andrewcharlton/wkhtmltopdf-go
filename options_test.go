@@ -48,6 +48,7 @@ func TestPageOptions(t *testing.T) {
 		{[]PageOption{Cookie("name", "value")}, []string{"--cookie", "name", "value"}},
 		{[]PageOption{CustomHeader("name", "value")}, []string{"--custom-header", "name", "value"}},
 		{[]PageOption{CustomHeaderPropagation()}, []string{"--custom-header-propagation"}},
+		{[]PageOption{NoCustomHeaderPropagation()}, []string{"--no-custom-header-propagation"}},
 	}
 
 	for _, tc := range testcases {

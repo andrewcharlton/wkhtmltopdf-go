@@ -169,3 +169,9 @@ func CustomHeader(name, value string) PageOption {
 func CustomHeaderPropagation() PageOption {
 	return PageOption{[]string{"--custom-header-propagation"}}
 }
+
+// NoCustomHeaderPropagation - Do not add HTTP headers specified by --custom-header for
+// each resource request.
+func NoCustomHeaderPropagation() PageOption {
+	return PageOption{[]string{"--no-custom-header-propagation"}}
+}
