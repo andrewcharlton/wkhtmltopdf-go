@@ -47,19 +47,37 @@ func TestAddPages(t *testing.T) {
 	}
 }
 
+func TestAddCover(t *testing.T) {
+
+	doc := NewDocument()
+	cov := NewPage("cover.html")
+	doc.AddCover(cov)
+
+	pg := NewPage("page1.html")
+	doc.AddPages(pg)
+
+	exp := Document{cover: cov, pages: []*Page{pg}, options: []string{}}
+	if reflect.DeepEqual(exp, doc) {
+		t.Errorf("Wrong document produced. Expected: %v, Got: %v", exp, doc)
+	}
+}
+
 func TestArgs(t *testing.T) {
 
 	doc := NewDocument(Grayscale(), PageSize("A5"))
+	cov := NewPage("cover.html")
 	pg1 := NewPage("page1.html", Allow("images/"))
 	pg2 := NewPage("page2.html", NoBackground())
+	doc.AddCover(cov)
 	doc.AddPages(pg1, pg2)
 
 	args := doc.args()
-	exp := []string{"--grayscale", "--page-size", "A5", "page1.html", "--allow",
-		"images/", "page2.html", "--no-background"}
+	exp := []string{"--grayscale", "--page-size", "A5", "cover", "cover.html",
+		"page1.html", "--allow", "images/", "page2.html",
+		"--no-background"}
 
 	if !reflect.DeepEqual(args, exp) {
-		t.Errorf("Wrong error produced. Expected: %v, Got: %v", exp, args)
+		t.Errorf("Wrong args produced. Expected: %v, Got: %v", exp, args)
 	}
 }
 
@@ -93,8 +111,9 @@ func TestFaultyTempDir(t *testing.T) {
 	TempDir = "./no/such/path/exists/to/create/temp/dirs/in"
 
 	doc := NewDocument()
-	pg1, _ := NewPageReader(bytes.NewBufferString("test"))
-	doc.AddPages(pg1)
+	pg1, _ := NewPageReader(bytes.NewBufferString("test1"))
+	pg2, _ := NewPageReader(bytes.NewBufferString("test2"))
+	doc.AddPages(pg1, pg2)
 
 	_, err := doc.createPDF()
 	if err == nil {
@@ -141,4 +160,23 @@ func TestWriteTemp(t *testing.T) {
 
 	// Clean up
 	os.RemoveAll(TempDir + "/" + doc.tmp)
+}
+
+func TestFaultyExecutable(t *testing.T) {
+
+	Executable = "wkhmltopdf"
+
+	doc := NewDocument()
+	pg := NewPage("test_data/simple.pdf")
+	doc.AddPages(pg)
+
+	buf := &bytes.Buffer{}
+	err := doc.Write(buf)
+	if err == nil {
+		t.Errorf("Error expected, got nil")
+	} else if !strings.HasPrefix(err.Error(), "Error running wkhtmltopdf") {
+		t.Errorf("wkhtmltopdf error expected, got: %v", err)
+	}
+
+	Executable = "wkhtmltopdf"
 }
