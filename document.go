@@ -11,6 +11,7 @@ import (
 
 // A Document represents a single pdf document.
 type Document struct {
+	cover   *Page
 	pages   []*Page
 	options []string
 
@@ -33,15 +34,29 @@ func (doc *Document) AddPages(pages ...*Page) {
 	doc.pages = append(doc.pages, pages...)
 }
 
+// AddCover adds a cover page to the document.
+func (doc *Document) AddCover(cover *Page) {
+	doc.cover = cover
+}
+
 // args calculates the args needed to run wkhtmltopdf
 func (doc *Document) args() []string {
 
 	args := []string{}
 	args = append(args, doc.options...)
+
+	// coverpage
+	if doc.cover != nil {
+		args = append(args, "cover", doc.cover.filename)
+		args = append(args, doc.cover.options...)
+	}
+
+	// pages
 	for _, pg := range doc.pages {
 		args = append(args, pg.filename)
 		args = append(args, pg.options...)
 	}
+
 	return args
 }
 
@@ -50,6 +65,10 @@ func (doc *Document) args() []string {
 func (doc *Document) readers() int {
 
 	n := 0
+	if doc.cover != nil && doc.cover.reader {
+		n++
+	}
+
 	for _, pg := range doc.pages {
 		if pg.reader {
 			n++

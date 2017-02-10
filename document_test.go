@@ -47,19 +47,37 @@ func TestAddPages(t *testing.T) {
 	}
 }
 
+func TestAddCover(t *testing.T) {
+
+	doc := NewDocument()
+	cov := NewPage("cover.html")
+	doc.AddCover(cov)
+
+	pg := NewPage("page1.html")
+	doc.AddPages(pg)
+
+	exp := Document{cover: cov, pages: []*Page{pg}, options: []string{}}
+	if reflect.DeepEqual(exp, doc) {
+		t.Errorf("Wrong document produced. Expected: %v, Got: %v", exp, doc)
+	}
+}
+
 func TestArgs(t *testing.T) {
 
 	doc := NewDocument(Grayscale(), PageSize("A5"))
+	cov := NewPage("cover.html")
 	pg1 := NewPage("page1.html", Allow("images/"))
 	pg2 := NewPage("page2.html", NoBackground())
+	doc.AddCover(cov)
 	doc.AddPages(pg1, pg2)
 
 	args := doc.args()
-	exp := []string{"--grayscale", "--page-size", "A5", "page1.html", "--allow",
-		"images/", "page2.html", "--no-background"}
+	exp := []string{"--grayscale", "--page-size", "A5", "cover", "cover.html",
+		"page1.html", "--allow", "images/", "page2.html",
+		"--no-background"}
 
 	if !reflect.DeepEqual(args, exp) {
-		t.Errorf("Wrong error produced. Expected: %v, Got: %v", exp, args)
+		t.Errorf("Wrong args produced. Expected: %v, Got: %v", exp, args)
 	}
 }
 
