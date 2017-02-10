@@ -226,3 +226,33 @@ func DisableInternalLinks() PageOption {
 func EnableInternalLinks() PageOption {
 	return PageOption{[]string{"--enable-internal-links"}}
 }
+
+// EnableJavascript - do allow web pages to run javascript
+func EnableJavascript() PageOption {
+	return PageOption{[]string{"--enable-javascript"}}
+}
+
+// DisableJavascript - do not allow web pages to run javascript
+func DisableJavascript() PageOption {
+	return PageOption{[]string{"--disable-javascript"}}
+}
+
+// JavascriptDelay - Wait some milliseconds for javascript to finish
+func JavascriptDelay(msec int) PageOption {
+	return PageOption{[]string{"--javascript-delay", strconv.Itoa(msec)}}
+}
+
+// KeepRelativeLinks - keep relative external links as relative external links
+func KeepRelativeLinks() PageOption {
+	return PageOption{[]string{"--keep-relative-links"}}
+}
+
+// LoadErrorHandling - Specify how to handle pages that fail to load: abort, ignore or skip.
+func LoadErrorHandling(handler string) PageOption {
+	return PageOption{[]string{"--load-error-handling", handler}}
+}
+
+// LoadMediaErrorHandling - specify how to handle media pages that fail to load: abort, ignore or skip.
+func LoadMediaErrorHandling(handler string) PageOption {
+	return PageOption{[]string{"--load-media-error-handling", handler}}
+}

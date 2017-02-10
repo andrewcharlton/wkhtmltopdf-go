@@ -60,6 +60,12 @@ func TestPageOptions(t *testing.T) {
 		{[]PageOption{NoImages()}, []string{"--no-images"}},
 		{[]PageOption{DisableInternalLinks()}, []string{"--disable-internal-links"}},
 		{[]PageOption{EnableInternalLinks()}, []string{"--enable-internal-links"}},
+		{[]PageOption{EnableJavascript()}, []string{"--enable-javascript"}},
+		{[]PageOption{DisableJavascript()}, []string{"--disable-javascript"}},
+		{[]PageOption{JavascriptDelay(100)}, []string{"--javascript-delay", "100"}},
+		{[]PageOption{KeepRelativeLinks()}, []string{"--keep-relative-links"}},
+		{[]PageOption{LoadErrorHandling("abort")}, []string{"--load-error-handling", "abort"}},
+		{[]PageOption{LoadMediaErrorHandling("skip")}, []string{"--load-media-error-handling", "skip"}},
 	}
 
 	for _, tc := range testcases {
