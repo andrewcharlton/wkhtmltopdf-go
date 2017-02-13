@@ -127,7 +127,8 @@ func TestMultipleReaders(t *testing.T) {
 	}
 
 	doc := wkhtmltopdf.NewDocument()
-	doc.AddPages(pages...)
+	doc.AddCover(pages[0])
+	doc.AddPages(pages[1:]...)
 
 	output := &bytes.Buffer{}
 	err := doc.Write(output)
