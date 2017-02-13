@@ -22,9 +22,7 @@ type Document struct {
 func NewDocument(opts ...Option) *Document {
 
 	doc := &Document{pages: []*Page{}, options: []string{}}
-	for _, opt := range opts {
-		doc.options = append(doc.options, opt.opts()...)
-	}
+	doc.AddOptions(opts...)
 	return doc
 }
 
@@ -37,6 +35,14 @@ func (doc *Document) AddPages(pages ...*Page) {
 // AddCover adds a cover page to the document.
 func (doc *Document) AddCover(cover *Page) {
 	doc.cover = cover
+}
+
+// AddOptions allows the setting of options after document creation.
+func (doc *Document) AddOptions(opts ...Option) {
+
+	for _, opt := range opts {
+		doc.options = append(doc.options, opt.opts()...)
+	}
 }
 
 // args calculates the args needed to run wkhtmltopdf

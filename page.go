@@ -20,9 +20,7 @@ type Page struct {
 func NewPage(filename string, opts ...PageOption) *Page {
 
 	pg := &Page{filename: filename, options: []string{}}
-	for _, opt := range opts {
-		pg.options = append(pg.options, opt.opts()...)
-	}
+	pg.AddOptions(opts...)
 	return pg
 }
 
@@ -41,4 +39,12 @@ func NewPageReader(r io.Reader, opts ...PageOption) (*Page, error) {
 	}
 
 	return pg, nil
+}
+
+// AddOptions allows the setting of options after page creation.
+func (pg *Page) AddOptions(opts ...PageOption) {
+
+	for _, opt := range opts {
+		pg.options = append(pg.options, opt.opts()...)
+	}
 }
