@@ -94,7 +94,12 @@ func (doc *Document) writeTempPages() error {
 	}
 
 	n := 0
-	for _, pg := range doc.pages {
+	all_pages := []*Page{}
+	if doc.cover != nil {
+		all_pages = append(all_pages, doc.cover)
+	}
+	all_pages = append(all_pages, doc.pages...)
+	for _, pg := range all_pages {
 		if !pg.reader {
 			continue
 		}
