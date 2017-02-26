@@ -1,6 +1,9 @@
 package wkhtmltopdf
 
-import "strconv"
+import (
+	"fmt"
+	"strconv"
+)
 
 // An Option to be applied to a page or document.
 type Option interface {
@@ -12,15 +15,13 @@ type GlobalOption struct {
 	options []string
 }
 
-// opts returns the options, to satisfy the options interface
 func (opt GlobalOption) opts() []string { return opt.options }
 
-// A PageOption can be applied only to a page.
+// A PageOption can be applied to pages and/or documents.
 type PageOption struct {
 	options []string
 }
 
-// opts returns the options, to satisfy the options interface
 func (opt PageOption) opts() []string { return opt.options }
 
 // Global Options ----------------------------------------------------------
@@ -115,6 +116,53 @@ func Quiet() GlobalOption {
 // if not specified).
 func Title(title string) GlobalOption {
 	return GlobalOption{[]string{"--title", title}}
+}
+
+// Outline - put an outline into the pdf
+func Outline() GlobalOption {
+	return GlobalOption{[]string{"--outline"}}
+}
+
+// NoOutline - do not put an outline into the pdf
+func NoOutline() GlobalOption {
+	return GlobalOption{[]string{"--no-outline"}}
+}
+
+// OutlineDepth - set the depth of the outline
+func OutlineDepth(level int) GlobalOption {
+	return GlobalOption{[]string{"--outline-depth", strconv.Itoa(level)}}
+}
+
+// DisableDottedLines - do not use dotted lines in the toc
+func DisableDottedLines() GlobalOption {
+	return GlobalOption{[]string{"--disable-dotted-lines"}}
+}
+
+// TocHeaderText - the header text of the toc
+func TocHeaderText(text string) GlobalOption {
+	return GlobalOption{[]string{"--toc-header-text", text}}
+}
+
+// TocLevelIndentation - for each level of headings in the toc indent by this length
+func TocLevelIndentation(width string) GlobalOption {
+	return GlobalOption{[]string{"--toc-level-indentation", width}}
+}
+
+// DisableTocLinks - do not link from toc to sections
+func DisableTocLinks() GlobalOption {
+	return GlobalOption{[]string{"--disable-toc-links"}}
+}
+
+// TocTextSizeShrink - for each level of headings in the toc the font is scaled
+// by this factor
+func TocTextSizeShrink(factor float64) GlobalOption {
+	return GlobalOption{[]string{"--toc-text-size-shrink", fmt.Sprintf("%.3f", factor)}}
+}
+
+// XSLStyleSheet - use the supplied xsl style sheet for printing the
+// table of content
+func XSLStyleSheet(file string) GlobalOption {
+	return GlobalOption{[]string{"--xsl-style-sheet", file}}
 }
 
 // Page Options -------------------------------------------------------------------------
@@ -255,4 +303,254 @@ func LoadErrorHandling(handler string) PageOption {
 // LoadMediaErrorHandling - specify how to handle media pages that fail to load: abort, ignore or skip.
 func LoadMediaErrorHandling(handler string) PageOption {
 	return PageOption{[]string{"--load-media-error-handling", handler}}
+}
+
+// DisableLocalFileAccess - do not allow conversion of a local file to read in other local
+// files unless explicitly allowed with Allow()
+func DisableLocalFileAccess() PageOption {
+	return PageOption{[]string{"--disable-local-file-access"}}
+}
+
+// EnableLocalFileAccess - do not allow conversion of a local file to read in other local
+// files unless explicitly allowed with Allow()
+func EnableLocalFileAccess() PageOption {
+	return PageOption{[]string{"--enable-local-file-access"}}
+}
+
+// MinFontSize - minimum font size
+func MinFontSize(size int) PageOption {
+	return PageOption{[]string{"--minimum-font-size", strconv.Itoa(size)}}
+}
+
+// ExcludeFromOutline - do not include in the table of contents and outlines
+func ExcludeFromOutline() PageOption {
+	return PageOption{[]string{"--exclude-from-outline"}}
+}
+
+// IncludeInOutline - include in the table of contents and outlines
+func IncludeInOutline() PageOption {
+	return PageOption{[]string{"--include-in-outline"}}
+}
+
+// PageOffset - set the starting page number
+func PageOffset(offset int) PageOption {
+	return PageOption{[]string{"--page-offset", strconv.Itoa(offset)}}
+}
+
+// Password - HTTP authentication password
+func Password(password string) PageOption {
+	return PageOption{[]string{"--password", password}}
+}
+
+// DisablePlugins - disable installed plugins
+func DisablePlugins() PageOption {
+	return PageOption{[]string{"--disable-plugins"}}
+}
+
+// EnablePlugins - enable installed plugins (plugins will likely not work)
+func EnablePlugins() PageOption {
+	return PageOption{[]string{"--enable-plugins"}}
+}
+
+// Post - add an additional post field
+func Post(name, value string) PageOption {
+	return PageOption{[]string{"--post", name, value}}
+}
+
+// PostFile - post an additional file (repeatable)
+func PostFile(name, path string) PageOption {
+	return PageOption{[]string{"--post-file", name, path}}
+}
+
+// PrintMediaType - use print media type instead of screen
+func PrintMediaType() PageOption {
+	return PageOption{[]string{"--print-media-type"}}
+}
+
+// NoPrintMediaType - do not use print media type instead of screen
+func NoPrintMediaType() PageOption {
+	return PageOption{[]string{"--no-print-media-type"}}
+}
+
+// Proxy - use a proxy
+func Proxy(proxy string) PageOption {
+	return PageOption{[]string{"--proxy", proxy}}
+}
+
+// RadioButton - use this svg file when rendering unchecked radio buttons
+func RadioButton(path string) PageOption {
+	return PageOption{[]string{"--radiobutton-svg", path}}
+}
+
+// RadioButtonChecked - use this svg file when rendering checked radio buttons
+func RadioButtonChecked(path string) PageOption {
+	return PageOption{[]string{"--radiobutton-checked-svg", path}}
+}
+
+// ResolveRelativeLinks
+func ResolveRelativeLinks() PageOption {
+	return PageOption{[]string{"--resolve-relative-links"}}
+}
+
+// RunScript
+func RunScript(js string) PageOption {
+	return PageOption{[]string{"--run-script", js}}
+}
+
+// DisableSmartShrinking - disable the intelligent shrinking strategy
+// used by webkit that makes the pixel/dpi ratio none constant.
+func DisableSmartShrinking() PageOption {
+	return PageOption{[]string{"--disable-smart-shrinking"}}
+}
+
+// EnableSmartShrinking - enable the intelligent shrinking strategy
+// used by webkit that makes the pixel/dpi ratio none constant.
+func EnableSmartShrinking() PageOption {
+	return PageOption{[]string{"--enable-smart-shrinking"}}
+}
+
+// StopSlowScripts - stop slow running javascripts
+func StopSlowScripts() PageOption {
+	return PageOption{[]string{"--stop-slow-scripts"}}
+}
+
+// NoStopSlowScripts
+func NoStopSlowScripts() PageOption {
+	return PageOption{[]string{"--no-stop-slow-scripts"}}
+}
+
+// DisableTocBackLinks - do not link from section header to toc
+func DisableTocBackLinks() PageOption {
+	return PageOption{[]string{"--disable-toc-back-links"}}
+}
+
+// EnableTocBackLinks - link from section header to toc
+func EnableTocBackLinks() PageOption {
+	return PageOption{[]string{"--enable-toc-back-links"}}
+}
+
+// UserStyleSheet - specify a user style sheet, to load with every page
+func UserStyleSheet(url string) PageOption {
+	return PageOption{[]string{"--user-style-sheet", url}}
+}
+
+// Username - HTTP authentication username
+func Username(username string) PageOption {
+	return PageOption{[]string{"--username", username}}
+}
+
+// ViewportSize - set viewport size if you have custom scrollbars or css
+// attribute over-flow to emulate window size
+func ViewportSize(size string) PageOption {
+	return PageOption{[]string{"--viewport-size", size}}
+}
+
+// WindowStatus - wait until window.status is equal to this string before
+// rendering page
+func WindowStatus(status string) PageOption {
+	return PageOption{[]string{"--window-status", status}}
+}
+
+// Zoom - use this zoom factor
+func Zoom(factor float64) PageOption {
+	return PageOption{[]string{"--zoom", fmt.Sprintf("%.2f", factor)}}
+}
+
+// Footer Options -------------------------------------------------------------------------
+
+// FooterCenter - centered footer text
+func FooterCenter(text string) PageOption {
+	return PageOption{[]string{"--footer-center", text}}
+}
+
+// FooterFontName - set footer font name
+func FooterFontName(font string) PageOption {
+	return PageOption{[]string{"--footer-font-name", font}}
+}
+
+// FooterFontSize - set footer font size
+func FooterFontSize(size int) PageOption {
+	return PageOption{[]string{"--footer-font-size", strconv.Itoa(size)}}
+}
+
+// FooterHTML - Adds an html footer
+func FooterHTML(url string) PageOption {
+	return PageOption{[]string{"--footer-html", url}}
+}
+
+// FooterLeft - left aligned footer text
+func FooterLeft(text string) PageOption {
+	return PageOption{[]string{"--footer-left", text}}
+}
+
+// FooterLine - display line above the footer
+func FooterLine() PageOption {
+	return PageOption{[]string{"--footer-line"}}
+}
+
+// NoFooterLine - do not display line above the footer
+func NoFooterLine() PageOption {
+	return PageOption{[]string{"--no-footer-line"}}
+}
+
+// FooterRight - right aligned footer text
+func FooterRight(text string) PageOption {
+	return PageOption{[]string{"--footer-right", text}}
+}
+
+// FooterSpacing - spacing between the footer and content in mm.
+func FooterSpacing(spacing float64) PageOption {
+	return PageOption{[]string{"--footer-spacing", fmt.Sprintf("%.2f", spacing)}}
+}
+
+// Header Options -------------------------------------------------------------------------
+
+// HeaderCenter - centered header text
+func HeaderCenter(text string) PageOption {
+	return PageOption{[]string{"--header-center", text}}
+}
+
+// HeaderFontName - set header font name
+func HeaderFontName(font string) PageOption {
+	return PageOption{[]string{"--header-font-name", font}}
+}
+
+// HeaderFontSize - set header font size
+func HeaderFontSize(size int) PageOption {
+	return PageOption{[]string{"--header-font-size", strconv.Itoa(size)}}
+}
+
+// HeaderHTML - Adds an html header
+func HeaderHTML(url string) PageOption {
+	return PageOption{[]string{"--header-html", url}}
+}
+
+// HeaderLeft - left aligned header text
+func HeaderLeft(text string) PageOption {
+	return PageOption{[]string{"--header-left", text}}
+}
+
+// HeaderLine - display line above the header
+func HeaderLine() PageOption {
+	return PageOption{[]string{"--header-line"}}
+}
+
+// NoHeaderLine - do not display line above the header
+func NoHeaderLine() PageOption {
+	return PageOption{[]string{"--no-header-line"}}
+}
+
+// HeaderRight - right aligned header text
+func HeaderRight(text string) PageOption {
+	return PageOption{[]string{"--header-right", text}}
+}
+
+// HeaderSpacing - spacing between the header and content in mm.
+func HeaderSpacing(spacing float64) PageOption {
+	return PageOption{[]string{"--header-spacing", fmt.Sprintf("%.2f", spacing)}}
+}
+
+// Replace - replace 'name' with value in header and footer (repeatable).
+func Replace(name, value string) PageOption {
+	return PageOption{[]string{"--replace", name, value}}
 }
