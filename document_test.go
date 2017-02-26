@@ -56,9 +56,13 @@ func TestAddCover(t *testing.T) {
 	pg := NewPage("page1.html")
 	doc.AddPages(pg)
 
-	exp := Document{cover: cov, pages: []*Page{pg}, options: []string{}}
+	exp := Document{pages: []*Page{pg, cov}, options: []string{}}
 	if reflect.DeepEqual(exp, doc) {
 		t.Errorf("Wrong document produced. Expected: %v, Got: %v", exp, doc)
+	}
+
+	if cov.cover != true {
+		t.Errorf("Cover page not marked")
 	}
 }
 
@@ -142,7 +146,7 @@ func TestWriteTemp(t *testing.T) {
 		t.Errorf("Unexpected error: %v", err)
 	}
 
-	exp := []string{"page00000001.html", "page00000002.html", "page00000003.html"}
+	exp := []string{"page00000001.html", "page00000002.html", "page00000004.html"}
 	files, err := ioutil.ReadDir(TempDir + "/" + doc.tmp)
 	if err != nil {
 		t.Errorf("Unexpected error: %v", err)

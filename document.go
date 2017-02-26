@@ -11,7 +11,6 @@ import (
 
 // A Document represents a single pdf document.
 type Document struct {
-	cover   *Page
 	pages   []*Page
 	options []string
 
@@ -34,7 +33,8 @@ func (doc *Document) AddPages(pages ...*Page) {
 
 // AddCover adds a cover page to the document.
 func (doc *Document) AddCover(cover *Page) {
-	doc.cover = cover
+	doc.pages = append(doc.pages, cover)
+	cover.cover = true
 }
 
 // AddOptions allows the setting of options after document creation.
@@ -51,16 +51,9 @@ func (doc *Document) args() []string {
 	args := []string{}
 	args = append(args, doc.options...)
 
-	// coverpage
-	if doc.cover != nil {
-		args = append(args, "cover", doc.cover.filename)
-		args = append(args, doc.cover.options...)
-	}
-
 	// pages
 	for _, pg := range doc.pages {
-		args = append(args, pg.filename)
-		args = append(args, pg.options...)
+		args = append(args, pg.args()...)
 	}
 
 	return args
@@ -71,10 +64,6 @@ func (doc *Document) args() []string {
 func (doc *Document) readers() int {
 
 	n := 0
-	if doc.cover != nil && doc.cover.reader {
-		n++
-	}
-
 	for _, pg := range doc.pages {
 		if pg.reader {
 			n++
@@ -93,18 +82,11 @@ func (doc *Document) writeTempPages() error {
 		return fmt.Errorf("Error creating temp directory")
 	}
 
-	n := 0
-	all_pages := []*Page{}
-	if doc.cover != nil {
-		all_pages = append(all_pages, doc.cover)
-	}
-	all_pages = append(all_pages, doc.pages...)
-	for _, pg := range all_pages {
+	for n, pg := range doc.pages {
 		if !pg.reader {
 			continue
 		}
 
-		n++
 		pg.filename = fmt.Sprintf("%v/%v/page%08d.html", TempDir, doc.tmp, n)
 		err := ioutil.WriteFile(pg.filename, pg.buf.Bytes(), 0666)
 		if err != nil {

@@ -13,6 +13,7 @@ type Page struct {
 	buf      *bytes.Buffer
 	reader   bool
 	options  []string
+	cover    bool
 }
 
 // NewPage creates a new page from the given filename (which can be a url),
@@ -47,4 +48,19 @@ func (pg *Page) AddOptions(opts ...PageOption) {
 	for _, opt := range opts {
 		pg.options = append(pg.options, opt.opts()...)
 	}
+}
+
+// args
+func (pg *Page) args() []string {
+
+	args := []string{}
+
+	if pg.cover {
+		args = append(args, "cover")
+	}
+
+	args = append(args, pg.filename)
+	args = append(args, pg.options...)
+	return args
+
 }
