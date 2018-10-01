@@ -35,7 +35,7 @@ func GooglePDF() {
 
 	doc := wkhtmltopdf.NewDocument()
 	pg := wkhtmltopdf.NewPage("www.google.com")
-	doc.AddPages(doc)
+	doc.AddPages(pg)
 
 	doc.WriteToFile("google.pdf")
 }
@@ -50,7 +50,7 @@ func GooglePDF() {
 
 	doc := wkhtmltopdf.NewDocument(wkhtmltopdf.Landscape())
 	pg := wkhtmltopdf.NewPage("www.google.com", wkhtmltopdf.NoImages())
-	doc.AddPages(doc)
+	doc.AddPages(pg)
 
 	doc.WriteToFile("google.pdf")
 }
